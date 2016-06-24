@@ -1,0 +1,127 @@
+#!/usr/bin/env Rscript
+
+library(argparser, quietly=TRUE);
+
+descriptions <- list(
+	install = "Install packages",
+	uninstall = "Uninstall packages",
+	upgrade = "Upgrade installed packages or installer",
+	help = "Show help message for a command"
+);
+commands <- names(descriptions);
+
+args <- commandArgs(trailingOnly=TRUE);
+
+print_help <- function(exit=TRUE) {
+	cat("usage: rip <command> [options]\n\n");
+	cat("commands:\n\n  ");
+	cat(
+		paste(
+			unlist(mapply( function(x, y)
+				sprintf("%s%s", format(x, width=12), y), commands, unlist(descriptions)
+			)),
+			collapse="\n  "
+		),
+		"\n\n"
+	);
+	if (exit) quit();
+}
+
+get_packages <- function(argv, throw=FALSE) {
+	if (length(argv$packages) > 1 || !is.na(argv$packages)) {
+		packages <- argv$packages;
+	} else if (!is.na(argv$requirement) && file.exists(argv$requirement)) {
+		packages <- readLines(argv$requirement);
+	} else if (throw) {
+		if (any(c("-r", "--requirements") %in% commandArgs())) {
+			stop("The file ", argv$requirement, " does not exists or cannot be read")	
+		} else {
+			stop("Either --packages or --requirements must be specified")
+		}
+	}
+
+	packages
+}
+
+# load bioconductor installer
+load_installer <- function() {
+	source("http://bioconductor.org/biocLite.R");
+}
+
+
+if (length(args) < 1) {
+	print_help();
+} else {
+	command <- args[1];
+	if (! command %in% commands) {
+		print_help(FALSE);
+		stop("Invalid command");
+	}
+}
+
+if (command == "help") {
+
+	pr <- arg_parser(descriptions$help, hide.opts=TRUE);
+	pr <- add_argument(pr, "command", "command to inquire");
+
+	argv <- parse_args(pr, args[-1]);
+
+	command <- argv$command;
+	args <- c(command, "--help");
+
+}
+
+if (command == "install") {
+
+	pr <- arg_parser(descriptions$install, hide.opts=TRUE);
+	pr <- add_argument(pr, "--packages", "R package names on CRAN or Bioconductor", nargs=Inf);
+	pr <- add_argument(pr, "--requirements", "package list file with one package per line", default="requirements.txt");
+	pr <- add_argument(pr, "--upgrade", "upgrade all specified packages to newest version", flag=TRUE);
+
+	argv <- parse_args(pr, args[-1]);
+
+	packages <- get_packages(argv, throw=TRUE);
+
+	load_installer();
+
+	for (package in packages) {
+		if (argv$upgrade || !require(package, character.only=TRUE, quietly=TRUE)) {
+			biocLite(package);
+		}	else {
+			cat("\n", package, " is already installed\n");
+		}
+	}
+
+} else if (command == "uninstall") {
+
+	pr <- arg_parser(descriptions$uninstall, hide.opts=TRUE);
+	pr <- add_argument(pr, "--packages", "R package names on CRAN or Bioconductor", nargs=Inf);
+	pr <- add_argument(pr, "--requirements", "package list file with one package per line", default=NA);
+
+	argv <- parse_args(pr, args[-1]);
+
+	packages <- get_packages(argv, throw=TRUE);
+
+	remove.packages(packages);
+	
+} else if (command == "upgrade") {
+
+	pr <- arg_parser(descriptions$upgrade, hide.opts=TRUE);
+	pr <- add_argument(pr, "--installer", "upgrade installer", flag=TRUE);
+
+	argv <- parse_args(pr, args[-1]);
+
+	load_installer();
+
+	if (argv$installer) {
+		biocLite("BiocUpgrade");
+	} else {
+		biocLite();
+	}
+
+} else {
+
+	stop("Invalid command");
+
+}
+
