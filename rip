@@ -2,7 +2,7 @@
 
 # Author:   David J. H. Shih  <djh.shih@gmail.com>
 # Date:     2016-06-23
-# Version:  0.1
+# Version:  0.2
 # License:  MIT
 
 
@@ -101,7 +101,10 @@ if (command == "install") {
 	load_installer();
 
 	for (package in packages) {
-		if (argv$upgrade || !require(package, character.only=TRUE, quietly=TRUE, warn.conflicts=FALSE)) {
+		if (argv$upgrade ||
+				!suppressWarnings(require(package, character.only=TRUE, quietly=TRUE,
+					warn.conflicts=FALSE))
+		) {
 			biocLite(package);
 		}	else {
 			cat("\n", package, "is already installed\n");
@@ -132,7 +135,16 @@ if (command == "install") {
 	if (argv$installer) {
 		biocLite("BiocUpgrade");
 	} else {
-		biocLite();
+		repos = biocinstallRepos();
+		ignore <- c("Biobase", "IRanges", "AnnotationDbi");
+		installed <- setdiff(rownames(installed.packages()), ignore);
+		dependencies <- c("Depends", "Imports", "LinkingTo");
+		avail <- available.packages(contriburl=contrib.url(repos));
+		pkgs <- intersect(installed, rownames(avail));
+		deps <- avail[pkgs, dependencies, drop = FALSE];
+		deps <- unique(unlist(apply(deps, 1, utils:::.clean_up_dependencies)));
+		deps <- deps[deps %in% rownames(avail)];
+		update.packages(oldPkgs=deps, repos=repos, ask=FALSE);
 	}
 
 } else {

@@ -10,7 +10,7 @@ directory included in the `$PATH` environmental variable, such as `/usr/bin`.
 If you are on Linux, you can also do
 
 ```bash
-curl -L https://github.com/djhshih/rip/archive/v0.1.tar.gz | tar -xz --strip-components=1 rip-*/rip
+curl -L https://github.com/djhshih/rip/archive/v0.2.tar.gz | tar -xz --strip-components=1 rip-*/rip
 install rip /usr/bin && rm rip
 ```
 
