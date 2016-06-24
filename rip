@@ -76,7 +76,7 @@ if (length(args) < 1) {
 
 if (command == "help") {
 
-	pr <- arg_parser(descriptions$help, hide.opts=TRUE);
+	pr <- arg_parser(descriptions$help);
 	pr <- add_argument(pr, "command", "command to inquire");
 
 	argv <- parse_args(pr, args[-1]);
@@ -88,7 +88,7 @@ if (command == "help") {
 
 if (command == "install") {
 
-	pr <- arg_parser(descriptions$install, hide.opts=TRUE);
+	pr <- arg_parser(descriptions$install);
 	pr <- add_argument(pr, "--packages", "R package names on CRAN or Bioconductor", nargs=Inf);
 	pr <- add_argument(pr, "--requirements", "package list file with one package per line", default="requirements.txt");
 	pr <- add_argument(pr, "--upgrade", "upgrade all specified packages to newest version", flag=TRUE);
@@ -109,7 +109,7 @@ if (command == "install") {
 
 } else if (command == "uninstall") {
 
-	pr <- arg_parser(descriptions$uninstall, hide.opts=TRUE);
+	pr <- arg_parser(descriptions$uninstall);
 	pr <- add_argument(pr, "--packages", "R package names on CRAN or Bioconductor", nargs=Inf);
 	pr <- add_argument(pr, "--requirements", "package list file with one package per line", default=NA);
 
@@ -121,7 +121,7 @@ if (command == "install") {
 	
 } else if (command == "upgrade") {
 
-	pr <- arg_parser(descriptions$upgrade, hide.opts=TRUE);
+	pr <- arg_parser(descriptions$upgrade);
 	pr <- add_argument(pr, "--installer", "upgrade installer", flag=TRUE);
 
 	argv <- parse_args(pr, args[-1]);
