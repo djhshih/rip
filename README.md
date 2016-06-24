@@ -20,7 +20,7 @@ Note that the second line requires root permission (`sudo`).
 ## Usage
 
 The main advantage of using `rip` is that it facilitates installation of 
-multiple dependencies. Suppose you are in a directory with have a file named 
+multiple dependencies. Suppose you are in a directory with a file named 
 `requirements.txt` containing:
 
 ```
