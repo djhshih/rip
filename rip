@@ -85,10 +85,10 @@ if (command == "install") {
 	load_installer();
 
 	for (package in packages) {
-		if (argv$upgrade || !require(package, character.only=TRUE, quietly=TRUE)) {
+		if (argv$upgrade || !require(package, character.only=TRUE, quietly=TRUE, warn.conflicts=FALSE)) {
 			biocLite(package);
 		}	else {
-			cat("\n", package, " is already installed\n");
+			cat("\n", package, "is already installed\n");
 		}
 	}
 
