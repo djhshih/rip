@@ -1,6 +1,16 @@
 #!/usr/bin/env Rscript
 
-library(argparser, quietly=TRUE);
+# Author:   David J. H. Shih  <djh.shih@gmail.com>
+# Date:     2016-06-23
+# License:  MIT
+
+
+# PREAMBLE
+
+if (!require(argparser, quietly=TRUE)) {
+	install.packages("argparser");
+	library(argparser, quietly=TRUE);
+}
 
 descriptions <- list(
 	install = "Install packages",
@@ -11,6 +21,9 @@ descriptions <- list(
 commands <- names(descriptions);
 
 args <- commandArgs(trailingOnly=TRUE);
+
+
+# FUNCTIONS
 
 print_help <- function(exit=TRUE) {
 	cat("usage: rip <command> [options]\n\n");
@@ -48,6 +61,8 @@ load_installer <- function() {
 	source("http://bioconductor.org/biocLite.R");
 }
 
+
+# MAIN
 
 if (length(args) < 1) {
 	print_help();

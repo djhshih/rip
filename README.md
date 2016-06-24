@@ -1,23 +1,16 @@
 # rip
 
-rip is a command line installer for R packages.
+`rip` is a command line installer for R packages.
 
 ## Installation
 
-You'll have to install the `argparser` R package using the traditional method in
-R:
-
-```r
-install.packages("argparser")
-```
-
-Then, simply place `rip` in a directory included in the `$PATH` environmental
+Simply place `rip` in a directory included in the `$PATH` environmental
 variable, such as `/usr/bin`.
 
 
 ## Usage
 
-The main advantage of using `rip` is that it can simply installation of a set of
+The main advantage of using `rip` is that it can simplify installation of a set of
 dependencies. Suppose you have a file named `requirements.txt` as follows:
 
 ```
@@ -28,7 +21,7 @@ dplyr
 tidyr
 ```
 
-Then within this directory, you can simply install all the packages by
+Then within this directory, you can simply install all above packages by
 
 ```bash
 rip install
