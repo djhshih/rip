@@ -25,10 +25,15 @@ multiple dependencies. Suppose you are in a directory with a file named
 
 ```
 io
-ggplot2
 magrittr
+ggplot2
 dplyr
 tidyr
+stringr
+lubridate
+devtools
+roxygen2
+testthat
 ```
 
 Then you can simply install all above packages by
