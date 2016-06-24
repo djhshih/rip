@@ -1,0 +1,2 @@
+# rip
+rip installs packages
