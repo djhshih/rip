@@ -4,8 +4,8 @@
 
 ## Installation
 
-Simply place `rip` in a directory included in the `$PATH` environmental
-variable, such as `/usr/bin`.
+Download a release archive, extract it, and place `rip` in a 
+directory included in the `$PATH` environmental variable, such as `/usr/bin`.
 
 If you are on Linux, you can also do
 
@@ -19,8 +19,9 @@ Note that the second line requires root permission (`sudo`).
 
 ## Usage
 
-The main advantage of using `rip` is that it can simplify installation of a set of
-dependencies. Suppose you have a file named `requirements.txt` as follows:
+The main advantage of using `rip` is that it facilitates installation of 
+multiple dependencies. Suppose you are in a directory with have a file named 
+`requirements.txt` containing:
 
 ```
 io
@@ -30,7 +31,7 @@ dplyr
 tidyr
 ```
 
-Then within this directory, you can simply install all above packages by
+Then you can simply install all above packages by
 
 ```bash
 rip install
