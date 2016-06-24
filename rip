@@ -7,9 +7,9 @@
 
 # PREAMBLE
 
-if (!require(argparser, quietly=TRUE)) {
+if (!suppressWarnings(require(argparser, quietly=TRUE))) {
 	install.packages("argparser");
-	library(argparser, quietly=TRUE);
+	library("argparser", quietly=TRUE);
 }
 
 descriptions <- list(
