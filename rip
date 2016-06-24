@@ -135,7 +135,16 @@ if (command == "install") {
 	if (argv$installer) {
 		biocLite("BiocUpgrade");
 	} else {
-		biocLite();
+		repos = biocinstallRepos();
+		ignore <- c("Biobase", "IRanges", "AnnotationDbi");
+		installed <- setdiff(rownames(installed.packages()), ignore);
+		dependencies <- c("Depends", "Imports", "LinkingTo");
+		avail <- available.packages(contriburl=contrib.url(repos));
+		pkgs <- intersect(installed, rownames(avail));
+		deps <- avail[pkgs, dependencies, drop = FALSE];
+		deps <- unique(unlist(apply(deps, 1, utils:::.clean_up_dependencies)));
+		deps <- deps[deps %in% rownames(avail)];
+		update.packages(oldPkgs=deps, repos=repos, ask=FALSE);
 	}
 
 } else {
