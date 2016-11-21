@@ -5,13 +5,14 @@
 ## Installation
 
 Download a release archive, extract it, and place `rip` in a 
-directory included in the `$PATH` environmental variable, such as `/usr/bin`.
+directory included in the `$PATH` environmental variable, such as `/usr/local/bin`.
 
 If you are on Linux, you can also do
 
 ```bash
-curl -L https://github.com/djhshih/rip/archive/v0.2.tar.gz | tar -xz --strip-components=1 rip-*/rip
-install rip /usr/bin && rm rip
+curl -L https://github.com/djhshih/rip/archive/v0.2.tar.gz | \
+	tar -xz --strip-components=1 rip-*/rip
+install rip /usr/local/bin && rm rip
 ```
 
 Note that the second line requires root permission (`sudo`).
