@@ -59,7 +59,13 @@ get_packages <- function(argv, throw=FALSE) {
 
 # load bioconductor installer
 load_installer <- function() {
-	source("http://bioconductor.org/biocLite.R");
+	if (as.numeric(version$major) >= 3 && as.numeric(version.minor) >= 5) {
+		if (!requireNamespace("BiocManager", quietly=TRUE)) {
+			install.packages("BiocManager");
+		}
+	} else {
+		stop("Please use rip version 0.2 for R version < 3.5");
+	}
 }
 
 
@@ -105,7 +111,7 @@ if (command == "install") {
 				!suppressWarnings(require(package, character.only=TRUE, quietly=TRUE,
 					warn.conflicts=FALSE))
 		) {
-			biocLite(package);
+			BiocManager::install(package);
 		}	else {
 			cat("\n", package, "is already installed\n");
 		}
@@ -133,18 +139,9 @@ if (command == "install") {
 	load_installer();
 
 	if (argv$installer) {
-		biocLite("BiocUpgrade");
+		update.packages("BiocManager");
 	} else {
-		repos = biocinstallRepos();
-		ignore <- c("Biobase", "IRanges", "AnnotationDbi");
-		installed <- setdiff(rownames(installed.packages()), ignore);
-		dependencies <- c("Depends", "Imports", "LinkingTo");
-		avail <- available.packages(contriburl=contrib.url(repos));
-		pkgs <- intersect(installed, rownames(avail));
-		deps <- avail[pkgs, dependencies, drop = FALSE];
-		deps <- unique(unlist(apply(deps, 1, utils:::.clean_up_dependencies)));
-		deps <- deps[deps %in% rownames(avail)];
-		update.packages(oldPkgs=deps, repos=repos, ask=FALSE);
+		BiocManager::install();
 	}
 
 } else {
