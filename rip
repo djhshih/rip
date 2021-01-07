@@ -17,6 +17,7 @@ descriptions <- list(
 	install = "Install packages",
 	uninstall = "Uninstall packages",
 	upgrade = "Upgrade installed packages or installer",
+	extract = "Extract requirements from scripts",
 	help = "Show help message for a command"
 );
 commands <- names(descriptions);
@@ -66,6 +67,14 @@ load_installer <- function() {
 	} else {
 		stop("Please use rip version 0.2 for R version < 3.5");
 	}
+}
+
+extract_requirements <- function(files) {
+	lines <- unlist(lapply(files, readLines, warn=FALSE));
+	idx <- grepl("^\\w*library([^)]+)", lines);
+	lines.lib <- lines[idx];
+	libs <- sub("library\\(\"?(.+)\"?\\).*", "\\1", lines.lib);
+	unique(libs)
 }
 
 
@@ -142,6 +151,20 @@ if (command == "install") {
 		update.packages("BiocManager");
 	} else {
 		BiocManager::install();
+	}
+
+} else if (command == "extract") {
+
+	pr <- arg_parser(descriptions$extract);
+	pr <- add_argument(pr, "--scripts", "R scripts", nargs=Inf);
+	
+	argv <- parse_args(pr, args[-1]);
+	
+	if (length(argv$scripts) == 1 && is.na(argv$scripts)) {
+		message("At least one R script is required.")
+	} else {
+		libs <- extract_requirements(argv$scripts);
+		cat(libs, sep="\n")
 	}
 
 } else {
