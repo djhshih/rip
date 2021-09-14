@@ -121,7 +121,7 @@ if (command == "install") {
 				!suppressWarnings(require(package, character.only=TRUE, quietly=TRUE,
 					warn.conflicts=FALSE))
 		) {
-			BiocManager::install(package);
+			BiocManager::install(package, ask=FALSE);
 		}	else {
 			cat("\n", package, "is already installed\n");
 		}
@@ -151,7 +151,7 @@ if (command == "install") {
 	if (argv$installer) {
 		update.packages("BiocManager");
 	} else {
-		BiocManager::install();
+		BiocManager::install(ask=FALSE);
 	}
 
 } else if (command == "extract") {
