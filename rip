@@ -72,9 +72,9 @@ load_installer <- function() {
 
 extract_requirements <- function(files) {
 	lines <- unlist(lapply(files, readLines, warn=FALSE));
-	idx <- grepl("^\\w*library([^)]+)", lines);
+	idx <- grepl("^[ \t]*library([^)]+)", lines);
 	lines.lib <- lines[idx];
-	libs <- sub("library\\(\"?(.+)\"?\\).*", "\\1", lines.lib);
+	libs <- sub(".*library\\(\"?(.+)\"?\\).*", "\\1", lines.lib);
 	unique(libs)
 }
 
